@@ -1,0 +1,31 @@
+{% extends "base_auth.html" %}
+
+{% block auth_title %}Log in{% endblock %}
+{% block auth_heading %}Welcome back{% endblock %}
+{% block auth_subheading %}Log in to your ShopDjango account{% endblock %}
+
+{% block auth_content %}
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% for field in form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label small fw-semibold">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-warning w-100 fw-semibold rounded-pill py-2">Log in</button>
+</form>
+{% endblock %}
+
+{% block auth_footer %}
+    Don't have an account? <a href="{% url 'accounts:register' %}" class="fw-semibold text-decoration-none">Sign up</a>
+{% endblock %}

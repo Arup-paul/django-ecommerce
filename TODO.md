@@ -1,18 +1,18 @@
 # Advanced Django Ecommerce — Daily Progress Tracker
 
-**Stack:** Django (MVT, no API) · PostgreSQL · Redis · Celery · Bootstrap 5 · HTMX · Stripe/Razorpay · AWS S3 · Docker
+**Stack:** Django (MVT, no API) · PostgreSQL · Redis · Celery · Bootstrap 5 · HTMX · Stripe/Razorpay · Docker
 **Start:** 2026-05-25 · **Deadline:** ~2026-06-24 (30 days)
 
 ---
 
 ## 📍 CURRENT STATUS (update this daily)
 
-- **Today's Date:** 2026-05-25
-- **Currently working on:** Day 1 — Project Setup
-- **Last completed:** _(none yet)_
-- **Next up:** Day 1 — Project Setup
-- **Carry-over tasks (incomplete from previous days):** _(none yet)_
-- **Overall progress:** 0 / 30 days
+- **Today's Date:** 2026-05-28
+- **Currently working on:** Day 3 — Profile & Address models/forms/views written (NOT yet migrated or tested)
+- **Last completed:** Day 2 — Custom User Model & Auth Basics
+- **Next up:** Finish Day 3 — migrate + test, then templates, password reset, allauth
+- **Carry-over tasks (incomplete from previous days):** Day 3 — see unchecked items below. ⚠️ Models/forms/views written but migrations NOT run and nothing tested yet.
+- **Overall progress:** 2 / 30 days (Day 3 in progress)
 
 > 📝 **How to use this tracker:**
 > - Tick `[x]` each sub-task as you finish it.
@@ -55,8 +55,8 @@
 
 # 📅 WEEK 1 — Foundation, Auth & Catalog
 
-## Day 1 — Project Setup & Base Template
-**Status:** 🔲 Not started | **Date done:** _____
+## Day 1 — Project Setup & Base Template ✅
+**Status:** ✅ Complete | **Date done:** 2026-05-26
 
 - [x] Create virtualenv + install Django, psycopg2, python-decouple
 - [x] `django-admin startproject core .`
@@ -64,49 +64,53 @@
 - [x] `.env` file + `.gitignore`
 - [x] PostgreSQL database created + connected
 - [x] Initial migration runs successfully
-- [ ] Git repo init + first commit
-- [ ] Base template (`templates/base.html`) with Bootstrap 5 CDN
-- [ ] Partials: `_navbar.html`, `_footer.html`, `_messages.html`, `_pagination.html`
-- [ ] `base_auth.html`, `base_dashboard.html` layouts
-- [ ] Static folder structure (`static/css/`, `static/js/`, `static/images/`)
-- [ ] Global CSS file with color variables
-- [ ] Home page view + URL working
+- [x] Git repo init + first commit
+- [x] Base template (`templates/base.html`) with Bootstrap 5 CDN
+- [x] Partials: `_navbar.html`, `_footer.html`, `_messages.html`, `_pagination.html`
+- [x] `base_auth.html`, `base_dashboard.html` layouts
+- [x] Static folder structure (`static/css/`, `static/js/`, `static/images/`)
+- [x] Global CSS file with color variables
+- [x] Home page view + URL working
 
 **Carry-over from previous day:** _(none)_
 **Notes:** _____
 
 ---
 
-## Day 2 — Custom User Model & Auth Basics
-**Status:** 🔲 Not started | **Date done:** _____
+## Day 2 — Custom User Model & Auth Basics ✅
+**Status:** ✅ Complete | **Date done:** 2026-05-28
 
-- [ ] Create `accounts` app
-- [ ] Custom User Model (AbstractBaseUser, UUID PK, email login)
-- [ ] UserManager with `create_user` + `create_superuser`
-- [ ] `AUTH_USER_MODEL` in settings
-- [ ] Registration form + view + template
-- [ ] Login form + view + template
-- [ ] Logout view
-- [ ] Email verification token (generate + send + verify URL)
-- [ ] Email backend setup (console for dev)
+- [x] Create `accounts` app
+- [x] Custom User Model (AbstractBaseUser, UUID PK, email login)
+- [x] UserManager with `create_user` + `create_superuser`
+- [x] `AUTH_USER_MODEL` in settings
+- [x] Registration form + view + template
+- [x] Login form + view + template
+- [x] Logout view
+- [x] Email verification token (generate + send + verify URL)
+- [x] Email backend setup (console for dev)
 
-**Carry-over from previous day:** _____
-**Notes:** _____
+**Carry-over from previous day:** _(none)_
+**Notes:** Switched User to a single `name` field (no first/last). Email verification uses a custom `PasswordResetTokenGenerator` subclass that hashes in `is_verified` so tokens self-invalidate after use. Console email backend already configured in dev.py; added `DEFAULT_FROM_EMAIL` + `SITE_URL` to base.py. Site-wide "verify your email" banner in base.html with a resend button.
 
 ---
 
 ## Day 3 — Password Reset, Social Auth, Profile, Address
-**Status:** 🔲 Not started | **Date done:** _____
+**Status:** 🚧 In progress | **Date done:** _____
 
 - [ ] Password reset flow (request → email → reset form → done)
 - [ ] django-allauth install + config (Google + Facebook)
-- [ ] UserProfile model + OneToOne signal
-- [ ] Profile view + edit form + template
-- [ ] Address model (multi-address, is_default)
-- [ ] Address list / add / edit / delete views + templates
+- [x] UserProfile model + OneToOne signal *(code only — not migrated/tested)*
+- [~] Profile view + edit form — view + forms done; **template + migrate + test pending**
+- [x] Address model (multi-address, is_default) *(code only — not migrated/tested)*
+- [~] Address list / add / edit / delete views — views + forms done; **templates pending**
 
-**Carry-over from previous day:** _____
-**Notes:** _____
+**Carry-over from previous day:** _(none)_
+**Notes (2026-05-28):**
+- Written but UNVERIFIED: `UserProfile` + `Address` models, `signals.py` (post_save auto-creates profile, wired via `apps.py` ready()), forms (`UserNameForm`, `ProfileForm`, `AddressForm` + `BootstrapFormMixin`), views (`profile_view`, `address_list/add/edit/delete/set_default`).
+- Installed **Pillow** (avatar ImageField needs it).
+- ⚠️ NEXT SESSION START HERE: (1) add URLs in `accounts/urls.py`, (2) `makemigrations accounts && migrate`, (3) build templates: `profile.html`, `address_list.html`, `address_form.html`, (4) smoke-test profile edit + address CRUD, (5) then password reset, (6) then allauth.
+- Address model enforces single default via overridden `save()`; first address auto-becomes default in the add view; deleting the default promotes the next address.
 
 ---
 

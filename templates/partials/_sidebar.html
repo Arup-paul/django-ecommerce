@@ -1,0 +1,38 @@
+{% load static %}
+{% comment %}
+   Off-canvas category drawer.
+   - .offcanvas + .offcanvas-start = Bootstrap's slide-in-from-left panel (hidden until triggered).
+   - It's opened by the hamburger button in _navbar.html via data-bs-target="#categoryDrawer".
+   - tabindex="-1" lets the panel receive focus for accessibility/keyboard (Esc to close).
+{% endcomment %}
+<div class="offcanvas offcanvas-start category-drawer" tabindex="-1"
+     id="categoryDrawer" aria-labelledby="categoryDrawerLabel">
+
+    <div class="offcanvas-header bg-dark text-light">
+        <h5 class="offcanvas-title fw-bold mb-0" id="categoryDrawerLabel">
+            <i class="bi bi-grid-3x3-gap-fill text-warning me-1"></i> Browse Categories
+        </h5>
+        {# btn-close-white = white X so it's visible on the dark header. data-bs-dismiss closes the panel. #}
+        <button type="button" class="btn-close btn-close-white"
+                data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body p-0">
+        {# list-group renders the categories as a clean vertical, clickable list #}
+        <div class="list-group list-group-flush">
+            {% for cat in categories %}
+                <a href="#" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3 drawer-cat">
+                    <i class="bi {{ cat.icon }} fs-5 text-warning"></i>
+                    <span class="fw-semibold flex-grow-1">{{ cat.name }}</span>
+                    <i class="bi bi-chevron-right text-muted small"></i>
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="p-3 border-top mt-2">
+            <a href="#" class="btn btn-warning w-100 rounded-pill">
+                <i class="bi bi-tags"></i> View Today's Deals
+            </a>
+        </div>
+    </div>
+</div>

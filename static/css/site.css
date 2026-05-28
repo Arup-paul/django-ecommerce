@@ -1,0 +1,373 @@
+/* =========================================================================
+   ShopDjango — Global Stylesheet
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. Design tokens (CSS custom properties)
+   ------------------------------------------------------------------------- */
+:root {
+    /* Brand palette */
+    --brand-primary:   #ffc107;   /* warm amber — accent / CTAs */
+    --brand-primary-d: #e0a800;   /* hover state */
+    --brand-primary-l: #fff8e1;   /* soft amber tint — backgrounds/highlights */
+    --brand-dark:      #1a1d21;   /* text on light, logo */
+    --brand-accent:    #ff5e3a;   /* deals / sale highlight */
+    --brand-success:   #1abc9c;   /* in-stock / success */
+    --brand-info:      #3498db;   /* informational */
+
+    /* Neutrals — light-first */
+    --color-bg:        #ffffff;   /* page background (now white) */
+    --color-bg-soft:   #f7f8fa;   /* subtle section banding */
+    --color-surface:   #ffffff;   /* cards */
+    --color-text:      #1f2328;   /* body text */
+    --color-muted:     #6b7280;   /* secondary text */
+    --color-border:    #ececf0;   /* hairline borders */
+
+    /* Shape — rounder, softer */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+
+    /* Shadow — light & airy */
+    --shadow-sm: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.05);
+    --shadow-md: 0 4px 16px rgba(16,24,40,0.06);
+    --shadow-lg: 0 16px 40px rgba(16,24,40,0.08);
+
+    /* Typography */
+    --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
+                 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* -------------------------------------------------------------------------
+   2. Base
+   ------------------------------------------------------------------------- */
+body {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: var(--brand-info);
+    text-decoration: none;
+    transition: color 0.15s ease-in-out;
+}
+a:hover {
+    color: var(--brand-primary-d);
+}
+
+/* -------------------------------------------------------------------------
+   3. Buttons & form overrides
+   ------------------------------------------------------------------------- */
+.btn-warning {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: var(--brand-dark);
+    font-weight: 600;
+}
+.btn-warning:hover,
+.btn-warning:focus {
+    background-color: var(--brand-primary-d);
+    border-color: var(--brand-primary-d);
+    color: var(--brand-dark);
+}
+.btn-outline-dark {
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+.btn-outline-dark:hover {
+    background-color: var(--color-text);
+    border-color: var(--color-text);
+}
+
+.form-control,
+.form-select {
+    border-radius: var(--radius-sm);
+    border-color: var(--color-border);
+}
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 0.18rem rgba(255, 193, 7, 0.18);
+}
+
+/* -------------------------------------------------------------------------
+   4. Utility helpers
+   ------------------------------------------------------------------------- */
+.text-brand      { color: var(--brand-primary-d) !important; }
+.text-deal       { color: var(--brand-accent) !important; }
+.bg-brand        { background-color: var(--brand-primary) !important; }
+.shadow-soft     { box-shadow: var(--shadow-sm) !important; }
+.shadow-elevated { box-shadow: var(--shadow-md) !important; }
+
+/* -------------------------------------------------------------------------
+   5. Light navbar
+   ------------------------------------------------------------------------- */
+.app-navbar {
+    border-bottom: 1px solid var(--color-border);
+}
+.app-navbar .navbar-brand { font-size: 1.25rem; color: var(--brand-dark); }
+/* Icon links: muted by default, darken on hover */
+.icon-link { color: var(--color-muted) !important; }
+.icon-link:hover { color: var(--brand-dark) !important; }
+.drawer-trigger { color: var(--color-text); background: var(--color-bg-soft); }
+.drawer-trigger:hover { background: var(--color-border); }
+
+/* Search: a soft pill with an inline icon */
+.search-pill {
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    overflow: hidden;
+    max-width: 580px;
+    align-items: center;
+    padding-left: 0.85rem;
+}
+.search-pill .search-icon { color: var(--color-muted); }
+.search-pill .form-control { box-shadow: none !important; padding-left: 0.5rem; }
+.search-pill:focus-within {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 0.18rem rgba(255,193,7,0.16);
+}
+
+/* -------------------------------------------------------------------------
+   6. Off-canvas category drawer
+   ------------------------------------------------------------------------- */
+.category-drawer { max-width: 320px; }
+.drawer-cat {
+    border: none;
+    transition: background-color 0.15s ease, padding-left 0.15s ease;
+}
+.drawer-cat:hover {
+    background-color: var(--color-bg-soft);
+    padding-left: 1.4rem;
+}
+
+/* -------------------------------------------------------------------------
+   7. Hero (light, image on the right)
+   ------------------------------------------------------------------------- */
+.hero { padding-top: 1.5rem; }
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--brand-primary-l);
+    color: var(--brand-primary-d);
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    margin-bottom: 1.1rem;
+}
+.hero-title {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--brand-dark);
+    margin-bottom: 1rem;
+}
+.hero-sub {
+    font-size: 1.1rem;
+    color: var(--color-muted);
+    max-width: 30rem;
+    margin-bottom: 1.5rem;
+}
+/* Visual panel: soft tinted rounded box holding the product image */
+.hero-visual {
+    position: relative;
+    background: linear-gradient(160deg, var(--brand-primary-l), var(--color-bg-soft));
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.hero-img { max-height: 340px; border-radius: var(--radius-md); }
+/* Fallback shown only if the hero image fails to load (toggled via inline onerror) */
+.hero-img-placeholder {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 9rem;
+    color: var(--brand-primary);
+    opacity: 0.55;
+}
+.hero-float-badge {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    background: #fff;
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* -------------------------------------------------------------------------
+   8. Section headers
+   ------------------------------------------------------------------------- */
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+.section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: var(--brand-dark);
+}
+.section-link {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+.section-link:hover { color: var(--brand-primary-d); }
+
+/* -------------------------------------------------------------------------
+   9. Category tiles
+   ------------------------------------------------------------------------- */
+.category-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.1rem 0.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    height: 100%;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.category-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: transparent;
+}
+.cat-icon-circle {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--brand-primary-l);
+    color: var(--brand-primary-d);
+    font-size: 1.35rem;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+.category-tile:hover .cat-icon-circle {
+    background: var(--brand-primary);
+    color: var(--brand-dark);
+}
+.cat-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: center;
+}
+
+/* -------------------------------------------------------------------------
+   10. Product cards
+   ------------------------------------------------------------------------- */
+.product-card {
+    position: relative;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    height: 100%;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent;
+}
+.badge-sale {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 2;
+    background: var(--brand-accent);
+    color: #fff;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+}
+.wishlist-btn {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--color-muted);
+    box-shadow: var(--shadow-sm);
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+.wishlist-btn:hover { color: var(--brand-accent); transform: scale(1.08); }
+.product-thumb-placeholder {
+    aspect-ratio: 1 / 1;
+    background: var(--color-bg-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    color: #c5c9d1;
+}
+/* Real image (replaces placeholder later) */
+.product-thumb {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    object-fit: cover;
+}
+.product-body { padding: 0.9rem; }
+.product-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.35rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.product-rating { font-size: 0.8rem; color: var(--brand-primary-d); margin-bottom: 0.45rem; }
+.product-rating .rating-count { color: var(--color-muted); margin-left: 0.25rem; }
+.product-price { display: flex; align-items: baseline; gap: 0.4rem; }
+.price-new { color: var(--color-text); font-weight: 700; font-size: 1.05rem; }
+.price-old { text-decoration: line-through; color: var(--color-muted); font-size: 0.85rem; }
+
+/* -------------------------------------------------------------------------
+   11. Trust strip
+   ------------------------------------------------------------------------- */
+.trust-strip {
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 0.5rem 0;
+}
+.trust-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.1rem 0.75rem;
+    text-align: left;
+}
+.trust-item i { font-size: 1.5rem; color: var(--brand-primary-d); }
+.trust-item strong { display: block; font-size: 0.9rem; color: var(--color-text); }
+.trust-item small { color: var(--color-muted); }

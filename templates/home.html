@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home - ShopDjango{% endblock %}
+
+{% block content %}
+
+{% comment %} Off-canvas category drawer — included only on the home page, opened by the navbar hamburger. {% endcomment %}
+{% include "partials/_sidebar.html" %}
+
+{# ---------- HERO ---------- #}
+<section class="hero mb-5">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+            <span class="hero-eyebrow"><i class="bi bi-stars"></i> New season · 2026</span>
+            <h1 class="hero-title">
+                Everyday essentials, <span class="text-brand">delivered fast.</span>
+            </h1>
+            <p class="hero-sub">
+                Thousands of products, blazing-fast checkout, and real-time order tracking —
+                all in one lightweight store.
+            </p>
+            <div class="d-flex gap-2 flex-wrap mb-4">
+                <a href="#" class="btn btn-warning btn-lg rounded-pill px-4 fw-semibold">
+                    <i class="bi bi-bag-check"></i> Start Shopping
+                </a>
+                <button type="button" class="btn btn-outline-dark btn-lg rounded-pill px-4"
+                        data-bs-toggle="offcanvas" data-bs-target="#categoryDrawer">
+                    <i class="bi bi-grid-3x3-gap"></i> Browse Categories
+                </button>
+            </div>
+            {# Small trust signals under the CTA #}
+            <div class="d-flex gap-4 flex-wrap text-muted small">
+                <span><i class="bi bi-truck text-warning"></i> Free shipping over ₹499</span>
+                <span><i class="bi bi-shield-check text-warning"></i> Secure payments</span>
+                <span><i class="bi bi-arrow-counterclockwise text-warning"></i> 7-day returns</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            {# Hero visual: real product/lifestyle image goes in the <img>; placeholder until then. #}
+            <div class="hero-visual">
+                <img src="{% static 'images/hero-product.jpg' %}" alt="Featured product"
+                     class="img-fluid hero-img"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                {# Fallback shown if the image is missing (onerror above swaps to this) #}
+                <div class="hero-img-placeholder">
+                    <i class="bi bi-bag-heart-fill"></i>
+                </div>
+                <span class="hero-float-badge shadow-sm">
+                    <i class="bi bi-lightning-charge-fill text-warning"></i> Up to 40% off
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ---------- CATEGORY CHIPS ---------- #}
+<section class="mb-5">
+    <div class="section-head">
+        <h2 class="section-title">Shop by category</h2>
+        <button type="button" class="btn btn-sm btn-link section-link"
+                data-bs-toggle="offcanvas" data-bs-target="#categoryDrawer">
+            See all <i class="bi bi-arrow-right"></i>
+        </button>
+    </div>
+    <div class="row g-3">
+        {% for cat in categories %}
+            <div class="col-4 col-md-3 col-lg-2">
+                <a href="#" class="category-tile">
+                    <span class="cat-icon-circle"><i class="bi {{ cat.icon }}"></i></span>
+                    <span class="cat-name">{{ cat.name }}</span>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# ---------- FEATURED PRODUCTS ---------- #}
+<section class="mb-5">
+    <div class="section-head">
+        <h2 class="section-title">Featured products</h2>
+        <a href="#" class="section-link">View all <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    <div class="row g-3 g-lg-4">
+        {% for product in featured_products %}
+            <div class="col-6 col-md-3">
+                <div class="product-card">
+                    <span class="badge badge-sale">SALE</span>
+                    <button type="button" class="wishlist-btn" aria-label="Add to wishlist">
+                        <i class="bi bi-heart"></i>
+                    </button>
+
+                    <div class="product-thumb-placeholder">
+                        <i class="bi bi-image"></i>
+                    </div>
+
+                    <div class="product-body">
+                        <h3 class="product-name">{{ product.name }}</h3>
+                        <div class="product-rating">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                            <span class="rating-count">(4.5)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-new">₹{{ product.new_price }}</span>
+                            <span class="price-old">₹{{ product.old_price }}</span>
+                        </div>
+                        <button class="btn btn-sm btn-warning w-100 rounded-pill fw-semibold mt-2">
+                            <i class="bi bi-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+{# ---------- TRUST STRIP ---------- #}
+<section class="trust-strip mb-5">
+    <div class="row g-0 text-center">
+        <div class="col-6 col-md-3 trust-item">
+            <i class="bi bi-truck"></i>
+            <div><strong>Free Shipping</strong><small>On orders above ₹499</small></div>
+        </div>
+        <div class="col-6 col-md-3 trust-item">
+            <i class="bi bi-arrow-counterclockwise"></i>
+            <div><strong>Easy Returns</strong><small>7-day return policy</small></div>
+        </div>
+        <div class="col-6 col-md-3 trust-item">
+            <i class="bi bi-shield-check"></i>
+            <div><strong>Secure Payments</strong><small>Stripe + Razorpay</small></div>
+        </div>
+        <div class="col-6 col-md-3 trust-item">
+            <i class="bi bi-headset"></i>
+            <div><strong>24x7 Support</strong><small>We're here to help</small></div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

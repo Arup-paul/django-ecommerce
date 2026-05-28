@@ -33,9 +33,14 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = []
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    'accounts',
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+# Custom user model — must be set BEFORE the first migration of this DB.
+AUTH_USER_MODEL = 'accounts.User'
 
 # ---------------------------------------------------------------------------
 # Middleware
@@ -114,6 +119,14 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# ---------------------------------------------------------------------------
+# Email
+# ---------------------------------------------------------------------------
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='ShopDjango <no-reply@shopdjango.local>')
+
+# Base URL used to build absolute links (e.g. email verification) outside a request.
+SITE_URL = config('SITE_URL', default='http://127.0.0.1:8000')
 
 # ---------------------------------------------------------------------------
 # Defaults
