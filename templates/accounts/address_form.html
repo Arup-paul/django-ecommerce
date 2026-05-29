@@ -1,0 +1,38 @@
+{% extends "base_dashboard.html" %}
+
+{% block dashboard_title %}{% if is_edit %}Edit address{% else %}Add address{% endif %}{% endblock %}
+{% block dashboard_heading %}{% if is_edit %}Edit address{% else %}Add address{% endif %}{% endblock %}
+{% block nav_addresses %}active{% endblock %}
+
+{% block dashboard_content %}
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% for field in form %}
+        {% comment %} is_default is a checkbox → render it inline with the label on the right. {% endcomment %}
+        {% if field.name == "is_default" %}
+            <div class="form-check mb-3">
+                {{ field }}
+                <label for="{{ field.id_for_label }}" class="form-check-label small fw-semibold">{{ field.label }}</label>
+            </div>
+        {% else %}
+            <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label small fw-semibold">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <button type="submit" class="btn btn-warning fw-semibold px-4">
+        {% if is_edit %}Update address{% else %}Save address{% endif %}
+    </button>
+    <a href="{% url 'accounts:address_list' %}" class="btn btn-link text-decoration-none">Cancel</a>
+</form>
+{% endblock %}

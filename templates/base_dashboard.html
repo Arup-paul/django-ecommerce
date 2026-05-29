@@ -12,18 +12,18 @@
                      style="width:64px; height:64px;">
                     <i class="bi bi-person-fill fs-2 text-warning"></i>
                 </div>
-                <h6 class="fw-bold mt-2 mb-0">{{ user.get_full_name|default:user.username }}</h6>
+                <h6 class="fw-bold mt-2 mb-0">{{ user.get_full_name }}</h6>
                 <small class="text-muted">{{ user.email }}</small>
             </div>
 
             <nav class="list-group list-group-flush">
-                <a href="#" class="list-group-item list-group-item-action {% block nav_profile %}{% endblock %}">
+                <a href="{% url 'accounts:profile' %}" class="list-group-item list-group-item-action {% block nav_profile %}{% endblock %}">
                     <i class="bi bi-person-circle me-2"></i> Profile
                 </a>
                 <a href="#" class="list-group-item list-group-item-action {% block nav_orders %}{% endblock %}">
                     <i class="bi bi-box-seam me-2"></i> My Orders
                 </a>
-                <a href="#" class="list-group-item list-group-item-action {% block nav_addresses %}{% endblock %}">
+                <a href="{% url 'accounts:address_list' %}" class="list-group-item list-group-item-action {% block nav_addresses %}{% endblock %}">
                     <i class="bi bi-geo-alt me-2"></i> Addresses
                 </a>
                 <a href="#" class="list-group-item list-group-item-action {% block nav_wishlist %}{% endblock %}">
@@ -33,7 +33,7 @@
                     <i class="bi bi-shield-lock me-2"></i> Change Password
                 </a>
                 <div class="list-group-item p-0">
-                    <form method="post" action="#" class="m-0">
+                    <form method="post" action="{% url 'accounts:logout' %}" class="m-0">
                         {% csrf_token %}
                         <button type="submit" class="list-group-item list-group-item-action text-danger border-0 w-100 text-start">
                             <i class="bi bi-box-arrow-right me-2"></i> Logout

@@ -7,12 +7,12 @@
 
 ## 📍 CURRENT STATUS (update this daily)
 
-- **Today's Date:** 2026-05-28
-- **Currently working on:** Day 3 — Profile & Address models/forms/views written (NOT yet migrated or tested)
-- **Last completed:** Day 2 — Custom User Model & Auth Basics
-- **Next up:** Finish Day 3 — migrate + test, then templates, password reset, allauth
-- **Carry-over tasks (incomplete from previous days):** Day 3 — see unchecked items below. ⚠️ Models/forms/views written but migrations NOT run and nothing tested yet.
-- **Overall progress:** 2 / 30 days (Day 3 in progress)
+- **Today's Date:** 2026-05-29
+- **Currently working on:** Day 3 — COMPLETE. Profile, Address, and password reset all done & verified.
+- **Last completed:** Day 3 password reset — hand-rolled request/done/confirm/complete flow (own token + email), smoke-tested: enumeration defense, single-use token, password actually changes, old pw rejected.
+- **Next up:** Day 4 — Category (MPTT) & Brand.
+- **Carry-over tasks (incomplete from previous days):** None. (Social auth / allauth dropped — no OAuth login wanted.)
+- **Overall progress:** 3 / 30 days (Day 3 complete)
 
 > 📝 **How to use this tracker:**
 > - Tick `[x]` each sub-task as you finish it.
@@ -24,7 +24,7 @@
 
 ## 🗺️ Module Completion Tracker
 
-- [ ] 1. Auth & User Management
+- [x] 1. Auth & User Management *(OAuth/social login excluded by choice)*
 - [ ] 2. Product Catalog
 - [ ] 3. Search & Filter
 - [ ] 4. Cart & Wishlist
@@ -42,7 +42,7 @@
 
 ## 🗄️ Database Schema Completion
 
-- [ ] **Users:** User · UserProfile · Address
+- [x] **Users:** User · UserProfile · Address
 - [ ] **Catalog:** Category (MPTT) · Brand · Product · ProductImage · Attribute · AttributeValue · ProductVariant · ProductVariant_Attribute · ProductReview · ReviewImage · Tag · Product_Tag
 - [ ] **Cart:** Cart · CartItem · Wishlist · WishlistItem
 - [ ] **Orders:** Order · OrderItem · OrderStatusHistory · Shipment · ReturnRequest
@@ -95,22 +95,22 @@
 
 ---
 
-## Day 3 — Password Reset, Social Auth, Profile, Address
-**Status:** 🚧 In progress | **Date done:** _____
+## Day 3 — Password Reset, Profile, Address ✅
+**Status:** ✅ Complete | **Date done:** 2026-05-29
 
-- [ ] Password reset flow (request → email → reset form → done)
-- [ ] django-allauth install + config (Google + Facebook)
-- [x] UserProfile model + OneToOne signal *(code only — not migrated/tested)*
-- [~] Profile view + edit form — view + forms done; **template + migrate + test pending**
-- [x] Address model (multi-address, is_default) *(code only — not migrated/tested)*
-- [~] Address list / add / edit / delete views — views + forms done; **templates pending**
+- [x] Password reset flow (request → email → reset form → done)
+- [~] django-allauth install + config (Google + Facebook) — **DROPPED** (no OAuth login wanted)
+- [x] UserProfile model + OneToOne signal *(migrated + signal verified)*
+- [x] Profile view + edit form *(template built, edit verified)*
+- [x] Address model (multi-address, is_default) *(migrated, single-default + promote-on-delete verified)*
+- [x] Address list / add / edit / delete views *(templates built, full CRUD smoke-tested)*
 
 **Carry-over from previous day:** _(none)_
-**Notes (2026-05-28):**
-- Written but UNVERIFIED: `UserProfile` + `Address` models, `signals.py` (post_save auto-creates profile, wired via `apps.py` ready()), forms (`UserNameForm`, `ProfileForm`, `AddressForm` + `BootstrapFormMixin`), views (`profile_view`, `address_list/add/edit/delete/set_default`).
-- Installed **Pillow** (avatar ImageField needs it).
-- ⚠️ NEXT SESSION START HERE: (1) add URLs in `accounts/urls.py`, (2) `makemigrations accounts && migrate`, (3) build templates: `profile.html`, `address_list.html`, `address_form.html`, (4) smoke-test profile edit + address CRUD, (5) then password reset, (6) then allauth.
+**Notes (2026-05-29):**
+- Profile + Address: migrated (`0002_address_userprofile`), URLs added, templates built (`profile.html`, `address_list.html`, `address_form.html`), full CRUD smoke-tested via test client (auto-default on first addr, set-default flips others, edit, delete promotes next). Pillow installed for avatar field.
+- Password reset: hand-rolled to match Day 2 auth style — `password_reset_token` (stock `PasswordResetTokenGenerator`, self-invalidates on pw change), `send_password_reset_email`, `PasswordResetRequestForm` + `SetNewPasswordForm`, 4 views + URLs + 4 `base_auth` templates. "Forgot password?" link added to login page. Smoke-tested incl. account-enumeration defense + single-use token.
 - Address model enforces single default via overridden `save()`; first address auto-becomes default in the add view; deleting the default promotes the next address.
+- **Social auth (allauth) intentionally dropped** — user does not want Google/Facebook OAuth login.
 
 ---
 

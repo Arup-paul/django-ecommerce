@@ -1,0 +1,44 @@
+{% extends "base_dashboard.html" %}
+
+{% block dashboard_title %}My Profile{% endblock %}
+{% block dashboard_heading %}My Profile{% endblock %}
+
+{# Highlight the Profile item in the sidebar by filling the block it left empty. #}
+{% block nav_profile %}active{% endblock %}
+
+{% block dashboard_content %}
+{% comment %}
+  One <form> wraps BOTH Django forms (name_form + profile_form). The view
+  validates them together on POST. enctype="multipart/form-data" is required
+  because profile_form has an avatar ImageField — without it, file uploads
+  silently never arrive in request.FILES.
+{% endcomment %}
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    {% for field in name_form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label small fw-semibold">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    {% for field in profile_form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label small fw-semibold">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+            {% if field.errors %}
+                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-warning fw-semibold px-4">Save changes</button>
+</form>
+{% endblock %}

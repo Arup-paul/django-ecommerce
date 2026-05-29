@@ -13,3 +13,9 @@ class EmailVerificationTokenGenerator(PasswordResetTokenGenerator):
 
 
 email_verification_token = EmailVerificationTokenGenerator()
+
+
+# Stock PasswordResetTokenGenerator already hashes in the user's password hash
+# and last_login, so a reset token auto-invalidates once the password changes
+# (or the user logs in). No subclass needed — we just want our own instance.
+password_reset_token = PasswordResetTokenGenerator()

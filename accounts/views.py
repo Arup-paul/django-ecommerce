@@ -7,16 +7,18 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.views.decorators.http import require_POST
 
-from accounts.emails import send_verification_email
+from accounts.emails import send_password_reset_email, send_verification_email
 from accounts.forms import (
     AddressForm,
     LoginForm,
+    PasswordResetRequestForm,
     ProfileForm,
     RegistrationForm,
+    SetNewPasswordForm,
     UserNameForm,
 )
 from accounts.models import Address
-from accounts.tokens import email_verification_token
+from accounts.tokens import email_verification_token, password_reset_token
 
 User = get_user_model()
 
@@ -101,6 +103,63 @@ def resend_verification_view(request):
         send_verification_email(user)
         messages.success(request, "Verification email sent. Please check your inbox.")
     return redirect("home")
+
+
+# ---------------------------------------------------------------------------
+# Password reset (request -> email -> confirm -> complete)
+# ---------------------------------------------------------------------------
+def password_reset_request_view(request):
+    """Step 1: ask for an email and send a reset link if an account exists."""
+    if request.method == "POST":
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            # If no user matches, we silently skip sending — but still redirect
+            # to the same "done" page, so an attacker can't tell which emails
+            # are registered (account-enumeration defense).
+            user = User.objects.filter(email=email, is_active=True).first()
+            if user is not None:
+                send_password_reset_email(user)
+            return redirect("accounts:password_reset_done")
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, "accounts/password_reset_request.html", {"form": form})
+
+
+def password_reset_done_view(request):
+    """Step 1b: static confirmation that an email was (maybe) sent."""
+    return render(request, "accounts/password_reset_done.html")
+
+
+def password_reset_confirm_view(request, uidb64, token):
+    """Step 2: validate the emailed link, then let the user set a new password."""
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, ValidationError, User.DoesNotExist):
+        user = None
+
+    # Token is invalid/expired (or uid didn't decode to a real user).
+    if user is None or not password_reset_token.check_token(user, token):
+        messages.error(request, "This password reset link is invalid or has expired.")
+        return redirect("accounts:password_reset")
+
+    if request.method == "POST":
+        form = SetNewPasswordForm(request.POST)
+        if form.is_valid():
+            user.set_password(form.cleaned_data["password1"])
+            user.save(update_fields=["password"])
+            # Changing the password rotates the hash, so the used token can
+            # never be replayed. Send them to log in with the new password.
+            return redirect("accounts:password_reset_complete")
+    else:
+        form = SetNewPasswordForm()
+    return render(request, "accounts/password_reset_confirm.html", {"form": form})
+
+
+def password_reset_complete_view(request):
+    """Step 3: tell the user the password was changed and link to login."""
+    return render(request, "accounts/password_reset_complete.html")
 
 
 # ---------------------------------------------------------------------------

@@ -51,6 +51,44 @@ class RegistrationForm(forms.ModelForm):
         return user
 
 
+class PasswordResetRequestForm(forms.Form):
+    """Step 1: user enters the email they want a reset link sent to."""
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "you@example.com"}),
+    )
+
+    def clean_email(self):
+        # Normalize only. We deliberately DON'T error when the email is unknown:
+        # revealing which emails have accounts is an enumeration leak. The view
+        # shows the same "check your inbox" message either way.
+        return self.cleaned_data["email"].lower()
+
+
+class SetNewPasswordForm(forms.Form):
+    """Step 2: user chooses a new password (with confirmation) after clicking
+    the emailed link. Not a ModelForm — the view owns which user it applies to."""
+
+    password1 = forms.CharField(
+        label="New password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Choose a new password"}),
+    )
+    password2 = forms.CharField(
+        label="Confirm new password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Re-enter new password"}),
+    )
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("The two password fields do not match.")
+        validate_password(password2)
+        return password2
+
+
 class LoginForm(forms.Form):
     """Collects email + password for authentication (not tied to a model)."""
 

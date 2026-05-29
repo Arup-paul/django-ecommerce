@@ -1,9 +1,17 @@
+import os
 import uuid
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+
+def avatar_upload_to(instance, filename):
+    # Discard the user's original filename (privacy + unsafe chars) and keep
+    # only the extension. UUID name guarantees uniqueness — no collisions.
+    ext = os.path.splitext(filename)[1].lower()
+    return f"avatars/{uuid.uuid4().hex}{ext}"
 
 
 class UserManager(BaseUserManager):
@@ -86,7 +94,7 @@ class UserProfile(models.Model):
         related_name="profile",
     )
     phone = models.CharField(_("phone number"), max_length=20, blank=True)
-    avatar = models.ImageField(_("avatar"), upload_to="avatars/", blank=True, null=True)
+    avatar = models.ImageField(_("avatar"), upload_to=avatar_upload_to, blank=True, null=True)
     bio = models.TextField(_("bio"), max_length=500, blank=True)
     date_of_birth = models.DateField(_("date of birth"), blank=True, null=True)
 
