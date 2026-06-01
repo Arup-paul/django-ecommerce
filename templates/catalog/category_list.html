@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load mptt_tags %}
+
+{% block title %}All Categories - ShopDjango{% endblock %}
+
+{% block content %}
+<div class="section-head mb-4">
+    <h1 class="section-title h3 mb-0">All Categories</h1>
+</div>
+
+{% if categories %}
+    {% comment %}
+       Render the whole tree with mptt's {% recursetree %}. For each node we draw
+       a card; if it has children we nest a <ul> with the rendered `children`
+       HTML, so the page mirrors the real MPTT hierarchy at any depth.
+    {% endcomment %}
+    <ul class="category-tree list-unstyled">
+        {% recursetree categories %}
+            <li class="category-tree-node">
+                <a href="#" class="category-tree-link d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-{% if node.is_leaf_node %}tag{% elif node.is_root_node %}grid-3x3-gap-fill{% else %}folder2{% endif %} text-warning"></i>
+                    <span class="fw-semibold">{{ node.name }}</span>
+                    {% if not node.is_leaf_node %}
+                        <span class="badge bg-light text-muted border ms-1">{{ node.get_descendant_count }}</span>
+                    {% endif %}
+                </a>
+                {% if not node.is_leaf_node %}
+                    <ul class="list-unstyled">{{ children }}</ul>
+                {% endif %}
+            </li>
+        {% endrecursetree %}
+    </ul>
+{% else %}
+    <div class="alert alert-info">No categories yet.</div>
+{% endif %}
+{% endblock %}

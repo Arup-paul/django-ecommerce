@@ -1,0 +1,38 @@
+{% load mptt_tags %}
+{% comment %}
+   Horizontal category strip — sits directly under the main navbar and shows on
+   every page (included from base.html). `nav_categories` is the active root
+   categories, injected by catalog.context_processors.nav_categories.
+
+   Renders the FULL MPTT tree at any depth via mptt's {% recursetree %} tag:
+   - level 0 (roots)         -> horizontal items in the bar
+   - level 1 (children)      -> a dropdown panel under the root
+   - level 2+ (descendants)  -> flyout submenus that open to the side
+   {% recursetree %} loops `node.get_children` for us automatically, so adding
+   a 4th level later needs no template change.
+{% endcomment %}
+{% if nav_categories %}
+<nav class="category-strip bg-white border-bottom shadow-sm">
+    <div class="container">
+        <ul class="nav flex-wrap py-1 cat-menu">
+            {% recursetree nav_categories %}
+                {% comment %} `node` = current category; `children` = rendered HTML
+                   of its descendants (empty string if it's a leaf). {% endcomment %}
+                <li class="cat-item {% if not node.is_leaf_node %}has-children{% endif %}">
+                    <a class="cat-link fw-semibold text-dark px-3" href="#">
+                        {{ node.name }}
+                        {% if not node.is_leaf_node %}
+                            <i class="bi bi-chevron-{% if node.is_root_node %}down{% else %}right{% endif %} small ms-1"></i>
+                        {% endif %}
+                    </a>
+                    {% if not node.is_leaf_node %}
+                        <ul class="cat-submenu shadow border-0">
+                            {{ children }}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endrecursetree %}
+        </ul>
+    </div>
+</nav>
+{% endif %}

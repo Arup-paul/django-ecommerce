@@ -15,7 +15,7 @@
                 <h6 class="fw-bold text-uppercase small">Shop</h6>
                 <ul class="list-unstyled small">
                     <li><a href="#" class="text-secondary text-decoration-none">All Products</a></li>
-                    <li><a href="#" class="text-secondary text-decoration-none">Categories</a></li>
+                    <li><a href="{% url 'catalog:category_list' %}" class="text-secondary text-decoration-none">Categories</a></li>
                     <li><a href="#" class="text-secondary text-decoration-none">Brands</a></li>
                     <li><a href="#" class="text-secondary text-decoration-none">Deals</a></li>
                 </ul>
@@ -31,8 +31,21 @@
                 </ul>
             </div>
 
-            <div class="col-md-3">
-                <h6 class="fw-bold text-uppercase small">Follow Us</h6>
+            <div class="col-md-2 col-6">
+                <h6 class="fw-bold text-uppercase small">Brands</h6>
+                {% comment %} Dynamic: nav_brands comes from catalog.context_processors,
+                   so this list reflects the actual active brands in the DB. {% endcomment %}
+                <ul class="list-unstyled small">
+                    {% for brand in nav_brands %}
+                        <li><a href="#" class="text-secondary text-decoration-none">{{ brand.name }}</a></li>
+                    {% empty %}
+                        <li class="text-secondary">No brands yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-md-1">
+                <h6 class="fw-bold text-uppercase small">Follow</h6>
                 <div class="d-flex gap-3 fs-5">
                     <a href="#" class="text-light"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="text-light"><i class="bi bi-instagram"></i></a>

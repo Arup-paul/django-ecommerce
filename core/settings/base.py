@@ -31,10 +31,13 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'mptt',
+]
 
 LOCAL_APPS = [
     'accounts',
+    'catalog',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -70,6 +73,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Injects `nav_categories` (the active category tree) into every
+                # template so the navbar category strip works on all pages.
+                'catalog.context_processors.nav_categories',
             ],
         },
     },

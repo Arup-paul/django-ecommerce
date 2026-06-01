@@ -371,3 +371,72 @@ a:hover {
 .trust-item i { font-size: 1.5rem; color: var(--brand-primary-d); }
 .trust-item strong { display: block; font-size: 0.9rem; color: var(--color-text); }
 .trust-item small { color: var(--color-muted); }
+
+/* -------------------------------------------------------------------------
+   12. Category strip — multi-level MPTT hover menu (under the navbar)
+   ------------------------------------------------------------------------- */
+.cat-menu { list-style: none; margin: 0; padding: 0; gap: 0.25rem; }
+
+/* Every menu item is a positioning context for its own submenu. */
+.cat-item { position: relative; }
+
+.cat-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+}
+.cat-item:hover > .cat-link { color: var(--brand-primary-d); }
+
+/* Submenus: hidden by default, shown when their parent <li> is hovered. */
+.cat-submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0.35rem 0;
+    min-width: 12rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    position: absolute;
+    z-index: 1050;          /* above page content + navbar */
+    display: none;
+}
+.cat-item:hover > .cat-submenu { display: block; }
+
+/* Level 1 (under a root): drop straight DOWN. */
+.cat-menu > .cat-item > .cat-submenu { top: 100%; left: 0; }
+
+/* Level 2+ (nested): fly OUT to the right of the parent item. */
+.cat-submenu .cat-submenu { top: 0; left: 100%; }
+
+/* Submenu links look like normal dropdown rows. */
+.cat-submenu .cat-link { padding: 0.5rem 1rem; border-radius: 0; }
+.cat-submenu .cat-link:hover { background: var(--color-bg-soft); }
+
+/* On small screens (< 992px) the absolute flyouts are awkward — show the tree
+   inline (expanded) so it stays usable on mobile. */
+@media (max-width: 991.98px) {
+    .cat-menu { flex-direction: column; align-items: stretch; }
+    .cat-submenu {
+        position: static;
+        display: block;
+        box-shadow: none !important;
+        padding-left: 1rem;
+    }
+}
+
+/* -------------------------------------------------------------------------
+   13. Category list page (nested tree)
+   ------------------------------------------------------------------------- */
+.category-tree ul { padding-left: 1.5rem; border-left: 1px dashed var(--color-border); margin-left: 0.5rem; }
+.category-tree-node { margin: 0.35rem 0; }
+.category-tree-link {
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-md);
+    transition: background 0.15s ease;
+}
+.category-tree-link:hover { background: var(--color-bg-soft); color: var(--brand-primary-d); }
